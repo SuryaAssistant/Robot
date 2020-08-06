@@ -129,7 +129,7 @@ subprocess.Popen(["python3", "serial_arduino_depan.py"], stdout=PIPE, stderr=PIP
 subprocess.Popen(["python3", "serial_arduino_belakang.py"], stdout=PIPE, stderr=PIPE)
 
 while(True):
-    
+
     # Membaca kamera
     # mengambil frame
     frame = vs.read()
@@ -186,8 +186,6 @@ while(True):
             us_kiri_dpn = default_num
             us_tengah_dpn = default_num
             us_kanan_dpn = default_num
-        
-
                         
         with open("data_serial_belakang.txt", "r", encoding = "utf-8") as h:
             data_serial_belakang = list(map(int, h.readlines()))
@@ -261,14 +259,14 @@ while(True):
             us_b_kiri = aman
         
         if status_x == "maju":
-            if us_tengah_dpn <=50 :
+            if us_tengah_dpn <=60 :
                 diam()
                 mundur()
                 diam()
                 status_x = "diam"
             
         if status_x == "mundur":
-            if us_tengah_blk <=50 :
+            if us_tengah_blk <=60 :
                 diam()
                 maju()
                 diam()
@@ -308,17 +306,27 @@ while(True):
 
     cv2.putText(frame_copy,'{}'.format(counter_us_dpn),(775,50), font, 0.5,(255,255,255),1,cv2.LINE_AA)
 
+    #create black image for 'debugging'
+    img = np.zeros((300,500,3), np.uint8)
+    cv2.putText(img,"Status Gerak : {}".format(status_x),(10,20), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(255,255,255),2,cv2.LINE_AA)
+    cv2.putText(img,"Depan        : {} | {} | {}".format(us_kiri_dpn, us_tengah_dpn, us_kanan_dpn),(10,40), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(255,255,255),2,cv2.LINE_AA)
+    cv2.putText(img,"Belakang     : {} | {} | {}".format(us_kiri_blk, us_tengah_blk, us_kanan_blk),(10,60), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(255,255,255),2,cv2.LINE_AA)
+
+
     # show image
     # Frame asli
     #cv2.imshow("Frame", frame)
     #cv2.imshow("Copy", frame_copy)
     
     # hanya tangkapan kamera
-    cv2.imshow("Kamera", camera_only_frame)
+    #cv2.imshow("Kamera", camera_only_frame)
     
     # Pengecilan 2x dari "Frame asli"
     status_frame = imutils.resize(frame_copy, width=400)
     cv2.imshow("Status", status_frame)
+    
+    # Window for status etc
+    cv2.imshow("Shell", img)
     
     # menambah counter
     counter_us_dpn = counter_us_dpn+1

@@ -39,21 +39,14 @@ sleep(1.00)
 print("Start")
 
 #------------------------------Function------------------------------#
-flag_encoder_kanan = 0
-flag_encoder_kiri = 0
-
-# looping siklus counter timing encoder
-counter_loop_encoder = 0
 
 # define for calling script
 def kanan():
-    flag_encoder_kanan = 1
     p_kanan=subprocess.Popen(["python3", "kontrol_motor_kanan.py"], stdout=PIPE, stderr=PIPE)
     stdout, stderr = p_kanan.communicate()
     print(stdout)
     
 def kiri():
-    flag_encoder_kiri = 1
     p_kiri=subprocess.Popen(["python3", "kontrol_motor_kiri.py"], stdout=PIPE, stderr=PIPE)
     stdout, stderr = p_kiri.communicate()
     print(stdout)
@@ -368,4 +361,5 @@ while(True):
 print("[INFO] cleaning up...")
 cv2.destroyAllWindows()
 vs.stop()
-subprocess.Popen(["pkill", "python3"], stdout=PIPE, stderr=PIPE)
+
+#subprocess.Popen(["pkill", "python3"], stdout=PIPE, stderr=PIPE)

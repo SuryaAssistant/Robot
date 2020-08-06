@@ -78,6 +78,7 @@ def buka_pintu():
     stdout, stderr = p.communicate()
     print(stdout)
 
+status_x = "diam"
 #---------------------------Kode Awal---------------------------#
 
 ap = argparse.ArgumentParser()
@@ -119,7 +120,7 @@ us_tengah_blk = default_num
 us_kanan_blk = default_num
 
 encoder_dpn = 0
-width_camera_only = 600
+width_camera_only = 800
 #---------------------------Operation Code---------------------------#
 
 # mengitung waktu untuk membaca serial arduino
@@ -142,22 +143,44 @@ while(True):
 
     if counter_us_dpn == 5:
         # call serial_communication
+        #default serial (if serial communication has an error)
+        with open("data_serial_default.txt", "r",encoding="utf-8") as f:
+            data_serial_default = list(map(int, f.readlines()))
+            
         # read stored variable value in data_serial_depan.txt
         with open("data_serial_depan.txt", "r",encoding="utf-8") as g:
             data_serial_depan = list(map(int, g.readlines()))
             
         # get variable value from data_serial.txt
-        us_tengah_dpn = data_serial_depan[1]#serial_arduino.us_tengah_dpn
-        us_kanan_dpn = data_serial_depan[2]#serial_arduino.us_kanan_dpn
-        us_kiri_dpn = data_serial_depan[0]#serial_arduino.us_kiri_dpn#
-        
-        with open("data_serial_belakang.txt", "r", encoding = "utf-8") as g:
-            data_serial_belakang = list(map(int, g.readlines()))
+        if data_serial_depan[0] != '':
+            us_kiri_dpn = data_serial_depan[0]#serial_arduino.us_kiri_dpn#
+        if data_serial_depan[0] == '':
+            us_kiri_dpn = data_serial_default[0]
+        if data_serial_depan[1] != '':
+            us_tengah_dpn = data_serial_depan[1]#serial_arduino.us_tengah_dpn
+        if data_serial_depan[1] == '':
+            us_tengah_dpn = data_serial_default[0]
+        if data_serial_depan[2] != '':
+            us_kanan_dpn = data_serial_depan[2]#serial_arduino.us_kanan_dpn
+        if data_serial_depan[2] == '':
+            us_kanan_dpn = data_serial_default[0]
+                        
+        with open("data_serial_belakang.txt", "r", encoding = "utf-8") as h:
+            data_serial_belakang = list(map(int, h.readlines()))
+        # get variable value from data_serial.txt
+        if data_serial_belakang[0] != '':
+            us_kiri_blk = data_serial_belakang[0]#serial_arduino.us_kiri_blk#
+        if data_serial_belakang[0] == '':
+            us_kiri_blk = data_serial_default[0]
+        if data_serial_belakang[1] != '':
+            us_tengah_blk = data_serial_belakang[1]#serial_arduino.us_tengah_blk
+        if data_serial_belakang[1] == '':
+            us_tengah_blk = data_serial_default[0]
+        if data_serial_belakang[2] != '':
+            us_kanan_blk = data_serial_belakang[2]#serial_arduino.us_kanan_blk
+        if data_serial_belakang[2] == '':
+            us_kanan_blk = data_serial_default[0]
             
-        us_tengah_blk = data_serial_belakang[1]#serial_arduino.us_tengah_blk#
-        us_kanan_blk = data_serial_belakang[2]#serial_arduino.us_kanan_blk#
-        us_kiri_blk = data_serial_belakang[0]#serial_arduino.us_kiri_blk#
-        
         
         # Kondisi di layar
         # us_depan
@@ -188,6 +211,20 @@ while(True):
         if us_kiri_blk > 30:
             us_b_kiri = aman
         
+        if status_x == "maju":
+            if us_tengah_dpn <=50 :
+                diam()
+                mundur()
+                diam()
+                status_x = "diam"
+            
+        if status_x == "mundur":
+            if us_tengah_blk <=50 :
+                diam()
+                maju()
+                diam()
+                status_x = "diam"
+            
         counter_us_dpn = 0
 
     # status_us_depan
@@ -241,9 +278,11 @@ while(True):
     if key == ord("w"):
         maju()
         status_jalan = "maju"
+        status_x = "maju"
     if key == ord("s"):
         mundur()
         status_jalan = "mundur"
+        status_x = "mundur"
     if key == ord("d"):
         kanan()                        
     if key == ord("a"):
@@ -251,6 +290,7 @@ while(True):
     if key == ord("x"):
         diam()
         status_jalan = "berhenti"
+        status_x = "diam"
 
     if key == ord("o"):
         p.ChangeDutyCycle(5)
@@ -264,7 +304,6 @@ while(True):
         
     if key == ord("m"): #buka pintu
         buka_pintu()
-
                 
     if key == ord("q"):
         break
@@ -272,3 +311,4 @@ while(True):
 print("[INFO] cleaning up...")
 cv2.destroyAllWindows()
 vs.stop()
+subprocess.Popen(["pkill", "python3"], stdout=PIPE, stderr=PIPE)

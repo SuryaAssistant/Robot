@@ -143,44 +143,93 @@ while(True):
 
     if counter_us_dpn == 5:
         # call serial_communication
-        #default serial (if serial communication has an error)
-        with open("data_serial_default.txt", "r",encoding="utf-8") as f:
-            data_serial_default = list(map(int, f.readlines()))
             
         # read stored variable value in data_serial_depan.txt
         with open("data_serial_depan.txt", "r",encoding="utf-8") as g:
             data_serial_depan = list(map(int, g.readlines()))
             
         # get variable value from data_serial.txt
-        if data_serial_depan[0] != '':
-            us_kiri_dpn = data_serial_depan[0]#serial_arduino.us_kiri_dpn#
-        if data_serial_depan[0] == '':
-            us_kiri_dpn = data_serial_default[0]
-        if data_serial_depan[1] != '':
-            us_tengah_dpn = data_serial_depan[1]#serial_arduino.us_tengah_dpn
-        if data_serial_depan[1] == '':
-            us_tengah_dpn = data_serial_default[0]
-        if data_serial_depan[2] != '':
-            us_kanan_dpn = data_serial_depan[2]#serial_arduino.us_kanan_dpn
-        if data_serial_depan[2] == '':
-            us_kanan_dpn = data_serial_default[0]
+        if len(data_serial_depan) == 3:
+            if data_serial_depan[0] != '':
+                us_kiri_dpn = data_serial_depan[0]#serial_arduino.us_kiri_dpn#
+            if data_serial_depan[0] == '':
+                us_kiri_dpn = default_num
+            if data_serial_depan[1] != '':
+                us_tengah_dpn = data_serial_depan[1]#serial_arduino.us_tengah_dpn
+            if data_serial_depan[1] == '':
+                us_tengah_dpn = default_num
+            if data_serial_depan[2] != '':
+                us_kanan_dpn = data_serial_depan[2]#serial_arduino.us_kanan_dpn
+            if data_serial_depan[2] == '':
+                us_kanan_dpn = default_num
+
+        if len(data_serial_depan) == 2:
+            if data_serial_depan[0] != '':
+                us_kiri_dpn = data_serial_depan[0]#serial_arduino.us_kiri_dpn#
+            if data_serial_depan[0] == '':
+                us_kiri_dpn = default_num
+            if data_serial_depan[1] != '':
+                us_tengah_dpn = data_serial_depan[1]#serial_arduino.us_tengah_dpn
+            if data_serial_depan[1] == '':
+                us_tengah_dpn = default_num
+            us_kanan_dpn = default_num
+
+        if len(data_serial_depan) == 1:
+            if data_serial_depan[0] != '':
+                us_kiri_dpn = data_serial_depan[0]#serial_arduino.us_kiri_dpn#
+            if data_serial_depan[0] == '':
+                us_kiri_dpn = default_num
+            us_tengah_dpn = default_num
+            us_kanan_dpn = default_num
+            
+        if len(data_serial_depan) == 0:
+            us_kiri_dpn = default_num
+            us_tengah_dpn = default_num
+            us_kanan_dpn = default_num
+        
+
                         
         with open("data_serial_belakang.txt", "r", encoding = "utf-8") as h:
             data_serial_belakang = list(map(int, h.readlines()))
         # get variable value from data_serial.txt
-        if data_serial_belakang[0] != '':
-            us_kiri_blk = data_serial_belakang[0]#serial_arduino.us_kiri_blk#
-        if data_serial_belakang[0] == '':
-            us_kiri_blk = data_serial_default[0]
-        if data_serial_belakang[1] != '':
-            us_tengah_blk = data_serial_belakang[1]#serial_arduino.us_tengah_blk
-        if data_serial_belakang[1] == '':
-            us_tengah_blk = data_serial_default[0]
-        if data_serial_belakang[2] != '':
-            us_kanan_blk = data_serial_belakang[2]#serial_arduino.us_kanan_blk
-        if data_serial_belakang[2] == '':
-            us_kanan_blk = data_serial_default[0]
+        
+        if len(data_serial_belakang) == 3:
+            if data_serial_belakang[0] != '':
+                us_kiri_blk = data_serial_belakang[0]#serial_arduino.us_kiri_blk#
+            if data_serial_belakang[0] == '':
+                us_kiri_blk = default_num
+            if data_serial_belakang[1] != '':
+                us_tengah_blk = data_serial_belakang[1]#serial_arduino.us_tengah_blk
+            if data_serial_belakang[1] == '':
+                us_tengah_blk = default_num
+            if data_serial_belakang[2] != '':
+                us_kanan_blk = data_serial_belakang[2]#serial_arduino.us_kanan_blk
+            if data_serial_belakang[2] == '':
+                us_kanan_blk = default_num
+
+        if len(data_serial_belakang) == 2:
+            if data_serial_belakang[0] != '':
+                us_kiri_blk = data_serial_belakang[0]#serial_arduino.us_kiri_blk#
+            if data_serial_belakang[0] == '':
+                us_kiri_blk = default_num
+            if data_serial_belakang[1] != '':
+                us_tengah_blk = data_serial_belakang[1]#serial_arduino.us_tengah_blk
+            if data_serial_belakang[1] == '':
+                us_tengah_blk = default_num
+            us_kanan_blk = default_num
+
+        if len(data_serial_belakang) == 1:
+            if data_serial_belakang[0] != '':
+                us_kiri_blk = data_serial_belakang[0]#serial_arduino.us_kiri_blk#
+            if data_serial_belakang[0] == '':
+                us_kiri_blk = default_num
+            us_tengah_blk = default_num
+            us_kanan_blk = default_num
             
+        if len(data_serial_belakang) == 0:
+            us_kiri_blk = default_num
+            us_tengah_blk = default_num
+            us_kanan_blk = default_num
         
         # Kondisi di layar
         # us_depan
